@@ -1,0 +1,52 @@
+services:
+  api:
+    build: .
+    image: github.com/pdedkov/keight
+    container_name: keight_api
+    working_dir: /opt/keight
+    command: ./api
+    env_file:
+      - .env.docker
+    networks:
+      - keight-net
+    ports:
+      - "8080:8080"
+    depends_on:
+      - redis
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"
+    networks:
+      - keight-net
+  upl:
+    image: curlimages/curl
+    env_file:
+      - .env.docker
+    environment:
+      - TEST_UPL_FILE=$TEST_UPL_FILE # upload file name from /tmp volume
+    networks:
+      - keight-net
+    depends_on:
+      - api
+    volumes:
+      - ./tests:/tmp
+    command: >
+      sh /tmp/upl.sh
+  dl:
+    image: curlimages/curl
+    env_file:
+      - .env.docker
+    environment:
+      - UPLOAD_ID=$UPLOAD_ID # replace with uploaded file id from upl test response
+    networks:
+      - keight-net
+    depends_on:
+      - api
+    volumes:
+      - ./tests:/tmp
+    command: >
+      sh /tmp/dl.sh
+networks:
+  keight-net:
+    name: keight-net

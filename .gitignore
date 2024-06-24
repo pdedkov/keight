@@ -1,0 +1,9 @@
+.idea
+.env
+.env.docker
+docker-compose.yml
+
+tests/*
+!tests/dl.sh
+!tests/upl.sh
+!tests/file.tar.gz

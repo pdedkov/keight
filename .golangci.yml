@@ -1,0 +1,138 @@
+run:
+  concurrency: 4
+  timeout: 15m
+  issues-exit-code: 1
+
+  tests: false
+  modules-download-mode: readonly
+
+
+output:
+  formats: colored-line-number
+# see https://golangci-lint.run/usage/linters/
+linters-settings:
+  dupl:
+    threshold: 300
+  funlen:
+    lines: 150
+    statements: 70
+  exhaustive:
+    check-generated: false
+    default-signifies-exhaustive: true
+    package-scope-only: false
+  nestif:
+    min-complexity: 10
+  goconst:
+    min-len: 2
+    min-occurrences: 3
+  gocritic:
+    enabled-tags:
+      - diagnostic
+      - experimental
+      - opinionated
+      - performance
+      - style
+    disabled-checks:
+      - stringConcatSimplify
+  gocyclo:
+    min-complexity: 15
+  goimports:
+    local-prefixes: bcgateway
+  gomnd:
+    checks: argument,case,condition,return
+  govet:
+    enable-all: true
+    disable:
+      - fieldalignment
+  lll:
+    line-length: 120
+  misspell:
+    locale: US
+
+linters:
+  disable-all: true
+  enable:
+    - bodyclose
+    - dogsled
+    - dupl
+    - errcheck
+    - funlen
+    - gochecknoinits
+    - goconst
+    - gocritic
+    - gocyclo
+    - gofmt
+    - goimports # wrong --fix action
+    - revive
+    - goprintffuncname
+    - gosec
+    - gosimple
+    - govet
+    - ineffassign
+    - lll
+    - nakedret
+    - rowserrcheck
+    - exportloopref
+    - staticcheck
+    - stylecheck
+    - typecheck
+    - unconvert
+    - unparam
+    - unused
+    - whitespace
+    - gocognit
+    - gochecknoglobals
+    - prealloc
+    - goerr113
+    - nolintlint
+    - asciicheck
+    - bidichk
+    - contextcheck
+    - durationcheck
+    - errname
+    - errorlint
+    - exhaustive
+    - forbidigo
+    - forcetypeassert
+    - goheader
+    - gomoddirectives
+    - gomodguard
+    - ireturn
+    - makezero
+    - nestif
+    - nilerr
+    - nilnil
+    - noctx
+    - predeclared
+    - promlinter
+    - sqlclosecheck
+    - tenv
+    - testpackage
+    - thelper
+    - tparallel
+    - wastedassign
+    - asasalint
+    - containedctx
+    - decorder
+    - execinquery
+    - gocheckcompilerdirectives
+    - grouper
+    - nosprintfhostport
+    - perfsprint
+    - reassign
+issues:
+  # Excluding configuration per-path, per-linter, per-text and per-source
+  exclude-rules:
+    - path: _test\.go
+      linters:
+        - gomnd
+  exclude-dirs:
+    - tests
+    - doc
+
+# golangci.com configuration
+# https://github.com/golangci/golangci/wiki/Configuration
+service:
+  golangci-lint-version: 1.57.2
+  prepare:
+    - echo "here I can run custom commands, but no preparation needed for this repo"
